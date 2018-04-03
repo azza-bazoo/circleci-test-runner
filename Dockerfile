@@ -6,6 +6,8 @@
 # - jq and awscli (for ecs-deploy script)
 # - latest version of node.js and a TAP-to-xUnit output
 #   converter (to format test output for CircleCI)
+# - two scripts for ECS deployment, an older
+#   shell script and newer Python script
 ########################################
 
 FROM buildpack-deps:jessie
@@ -18,13 +20,13 @@ RUN apt-get update && apt-get install -y python-dev python-pip jq
 ########################################
 # install official Amazon Web Services CLI
 
-RUN pip install awscli
+RUN pip install awscli ecs-deploy
 
 ########################################
-# install Node.js 7.7, based on steps in official image
+# install Node.js 8.11, based on steps in official image
 # https://github.com/nodejs/docker-node
 
-ENV NODE_VERSION 7.7.3
+ENV NODE_VERSION 8.11.1
 
 RUN curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.xz" \
   && tar -xJf "node-v$NODE_VERSION-linux-x64.tar.xz" -C /usr/local --strip-components=1 \
@@ -52,7 +54,7 @@ RUN curl -L "https://github.com/docker/compose/releases/download/1.11.2/docker-c
   && chmod +x /usr/local/bin/docker-compose
 
 ########################################
-# install ecs-deploy helper script
+# install ecs-deploy shell script
 
 RUN curl -L https://raw.githubusercontent.com/silinternational/ecs-deploy/develop/ecs-deploy -o /usr/local/bin/ecs-deploy \
   && chmod +x /usr/local/bin/ecs-deploy
