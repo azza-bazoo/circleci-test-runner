@@ -34,6 +34,13 @@ RUN curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-
   && ln -s /usr/local/bin/node /usr/local/bin/nodejs
 
 ########################################
+# update NPM to version 6, so we have
+# the new security audits and `npm ci`
+# (node 8.11.1 bundles npm 5.6)
+
+RUN npm install -g npm@'^6'
+
+########################################
 # install TAP-to-xUnit output converter
 # https://github.com/aghassemi/tap-xunit
 
